@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "async-crypto"
+version = "0.1.0"
+description = ""
+authors = ["Vladimir_T <lobster2@mail.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+aiohttp = "^3.10.10"
+sqlalchemy = "^2.0.36"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
