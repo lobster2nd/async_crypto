@@ -1,20 +1,23 @@
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, Mapped, mapped_column
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
+from core.config import settings
 
-Base = declarative_base()
+class DatabaseHelper:
+    def __init__(self, url: str, echo: bool = False):
+        self.engine = create_async_engine(
+            url=url,
+            echo=echo
+        )
+        self.session_factory = async_sessionmaker(
+            bind=self.engine,
+            autoflush=False,
+            autocommit=False,
+            expire_on_commit=False
+        )
 
-class Ticker(Base):
-    __tablename__ = "tickers"
+    async def get_session(self):
+        """Метод для получения асинхронной сессии"""
+        async with self.session_factory() as session:
+            yield session
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    currency: Mapped[str]
-    price: Mapped[float]
-    timestamp: Mapped[int]
-
-DATABASE_URL = "sqlite:///tickers.db"
-engine = create_engine(DATABASE_URL, echo=True)
-Base.metadata.create_all(engine)
-
-session_factory = sessionmaker(bind=engine)
+db_helper = DatabaseHelper(url=settings.db_url, echo=settings.db_echo)

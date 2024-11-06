@@ -3,7 +3,8 @@ import time
 import aiohttp
 import asyncio
 
-from app.database import session_factory, Ticker
+from app.models import Ticker
+from app.database import db_helper
 
 async def fetch_price(session, currency):
     """Получение данных с биржи"""
@@ -15,12 +16,12 @@ async def fetch_price(session, currency):
 
 async def save_to_db(currency, price):
     """Сохранение данных в БД"""
-    with session_factory() as session:
+    async for session in db_helper.get_session():
         ticker = Ticker(currency=currency,
                         price=price,
                         timestamp=int(time.time()))
         session.add(ticker)
-        session.commit()
+        await session.commit()
 
 async def get_prices():
     """Точка входа в программу"""
