@@ -16,7 +16,7 @@ async def fetch_price(session, currency):
 
 async def save_to_db(currency, price):
     """Сохранение данных в БД"""
-    async for session in db_helper.get_session():
+    async for session in db_helper.get_db_session():
         ticker = Ticker(currency=currency,
                         price=price,
                         timestamp=int(time.time()))
@@ -32,9 +32,4 @@ async def get_prices():
 
             await save_to_db('btc_usd', btc_price)
             await save_to_db('eth_usd', eth_price)
-            print(f"BTC/USD: {btc_price}, ETH/USD: {eth_price}")
             await asyncio.sleep(60)
-
-
-if __name__ == "__main__":
-    asyncio.run(get_prices())

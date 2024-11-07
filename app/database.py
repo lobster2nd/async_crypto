@@ -1,4 +1,5 @@
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, \
+    AsyncSession
 
 from core.config import settings
 
@@ -15,8 +16,12 @@ class DatabaseHelper:
             expire_on_commit=False
         )
 
-    async def get_session(self):
+    async def get_session(self) -> AsyncSession:
         """Метод для получения асинхронной сессии"""
+        return self.session_factory()
+
+    async def get_db_session(self) -> AsyncSession:
+        """Метод для получения асинхронной сессии для работы с БД"""
         async with self.session_factory() as session:
             yield session
 
