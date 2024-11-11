@@ -19,7 +19,15 @@
 ```
 git clone https://github.com/lobster2nd/async_crypto.git  
 cd async_crypto 
-```  
+```
+
++ Создать файл .env, задав значения переменным POSTGRES_DB, POSTGRES_PASSWORD, POSTGRES_USER  
+  Например:
+```
+POSTGRES_DB=postgres
+POSTGRES_PASSWORD=postgres
+POSTGRES_USER=postgres
+```
 
 + Запуск сервера:  
 
